@@ -11,11 +11,7 @@ class UserController {
 
   // get auth user
   async get() {
-    const userData = await UserModel.findAll({
-      attributes: { exclude: User.hide }
-    });
-    if (userData.length == 0) return global.Res.notFound();
-    global.Res.success(userData);
+    global.Res.success(this.req.user);
   }
 
   // delete by userId

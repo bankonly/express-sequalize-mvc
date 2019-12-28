@@ -36,9 +36,9 @@ class AuthenticationController {
     if (!isPwdMatched) return global.Res.badRequest([], "PASSWORD NOT MATCHED");
 
     isUser.isTokenChangeCount + 1;
-    isUser.save()
+    isUser.save();
     const token = jwtHelper.jwtMethod(isUser);
-    
+
     return global.Res.success({ token: token });
   }
 

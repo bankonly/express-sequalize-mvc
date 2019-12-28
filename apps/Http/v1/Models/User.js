@@ -3,13 +3,18 @@ const Model = Sequelize.Model;
 
 class UserModel extends Model {
   // Hidden Field
-  hide = ["password", "isAdmin", "isBanned"];
+  hiden() {
+    return ["password", "isAdmin", "isBanned"];
+  }
 
   async findByFirstName(value) {
     return await UserModel.findOne({ where: { firstName: value } });
   }
   async findByPhone(value) {
-    return await UserModel.findOne({ where: { phoneNumber: value },attributes:{exclude:this.hide} });
+    return await UserModel.findOne({
+      where: { phoneNumber: value },
+      attributes: { exclude: this.hiden() }
+    });
   }
   async findByLastName(value) {
     return await UserModel.findOne({ where: { lastName: value } });
