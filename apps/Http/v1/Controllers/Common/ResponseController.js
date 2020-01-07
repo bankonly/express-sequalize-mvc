@@ -112,6 +112,21 @@ class ResponseController {
       data: data
     });
   }
+
+  // outPut
+  somethingWrong(
+    data = [],
+    msg = "something wrong",
+    status = false,
+    code = 500
+  ) {
+    return this.res.send({
+      message: msg,
+      status: status,
+      code: code,
+      data: data
+    });
+  }
 }
 
 module.exports = res => new ResponseController(res);

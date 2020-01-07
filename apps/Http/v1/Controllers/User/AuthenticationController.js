@@ -15,31 +15,38 @@ class AuthenticationController {
 
   async login() {
     // Validate
-    const { error } = UserValidator.loginValidator(this.body);
-    // CHeck if error is true
-    if (error) {
-      global.Log.error(error.message);
-      return global.Res.badRequest();
+
+    try {
+      const { error } = UserValidator.loginValidator(this.body);
+
+      // CHeck if error is true
+      if (error) {
+        global.Log.error(error.message);
+        return global.Res.badRequest([], "Check Username and password");
+      }
+      // Check if value incoming is already EXist
+      const isUser = await User.findByPhone(this.body.phoneNumber);
+      const isUserToSave = await UserModel.findOne({
+        where: { phoneNumber: this.body.phoneNumber }
+      });
+
+      if (isUser == null) return global.Res.notFound(this.body.phoneNumber);
+      const isPwdMatched = await bcryptHelper.deHashPassword(
+        this.body.password,
+        isUserToSave.password
+      );
+
+      if (!isPwdMatched)
+        return global.Res.badRequest([], "PASSWORD NOT MATCHED");
+
+      isUser.isTokenChangeCount + 1;
+      isUser.save();
+      const token = jwtHelper.jwtMethod(isUser);
+
+      return global.Res.success({ token: token });
+    } catch (error) {
+      return global.Res.badRequest([], "Check Username and password");
     }
-    // Check if value incoming is already EXist
-    const isUser = await User.findByPhone(this.body.phoneNumber);
-    const isUserToSave = await UserModel.findOne({
-      where: { phoneNumber: this.body.phoneNumber }
-    });
-
-    if (isUser == null) return global.Res.notFound(this.body.phoneNumber);
-    const isPwdMatched = await bcryptHelper.deHashPassword(
-      this.body.password,
-      isUserToSave.password
-    );
-
-    if (!isPwdMatched) return global.Res.badRequest([], "PASSWORD NOT MATCHED");
-
-    isUser.isTokenChangeCount + 1;
-    isUser.save();
-    const token = jwtHelper.jwtMethod(isUser);
-
-    return global.Res.success({ token: token });
   }
 
   // get auth user

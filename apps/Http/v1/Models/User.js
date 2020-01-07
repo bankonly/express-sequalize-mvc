@@ -1,6 +1,9 @@
 const { sequelize, Sequelize } = require("../../../../configs/db");
 const Model = Sequelize.Model;
 
+// relationShip Model
+const { DailyPayModel } = require("./DailyPay");
+
 class UserModel extends Model {
   // Hidden Field
   hiden() {
@@ -98,5 +101,7 @@ UserModel.init(
     modelName: "users"
   }
 );
+
+UserModel.hasMany(DailyPayModel,{foreignKey:"userId"});
 
 module.exports = { UserModel: UserModel, User: new UserModel() };
