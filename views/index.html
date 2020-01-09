@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="clickMe()">CLICK ME</button>
+    <input type="text" id="input">
+    <h1>HELLO WORD</h1>
+    <table id="list">
+        <tr >
+            <td>LIST</td>
+        </tr>
+    </table>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="/socket.io/socket.io.js"></script>  
+    <script>
+        var socket = io.connect("http://192.168.1.148:5000")
+        function clickMe(){
+            socket.emit("onJoin",$("#input").val())
+        }
+        socket.on("emitJoin",(data)=> {
+            console.log(data)
+            $("#list").append("<tr><td>"+data.createdAt+"-"+data.title+"</td></tr>")
+        })
+    </script>
+</body>
+</html>

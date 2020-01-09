@@ -28,6 +28,10 @@ module.exports = {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false
       },
+      dateOnly:{
+        type:Sequelize.STRING(30),
+        allowNull:false
+      },
       createdAt: {
         defaultValue: Sequelize.NOW,
         allowNull: false,

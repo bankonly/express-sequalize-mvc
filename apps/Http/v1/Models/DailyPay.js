@@ -5,8 +5,42 @@ const Model = Sequelize.Model;
 const { CurrencyModel } = require("./Currency");
 
 class DailyPayModel extends Model {
+  column() {
+    return [
+      "id",
+      "userId",
+      "currencyId",
+      "title",
+      "detail",
+      "amount",
+      "createdAt",
+      "updatedAt",
+      "deletedAt",
+      [
+        sequelize.fn(
+          "date_format",
+          sequelize.col("dateOnly"),
+          "%Y-%m-%d %h:%i:%s"
+        ),
+        "dateOnly"
+      ]
+    ];
+  }
+
   async findById(id) {
-    return await DailyPayModel.findOne({ where: { id: id } });
+    return await DailyPayModel.findOne({
+      where: { id: id },
+      include: this.joinCurrencyCondition()
+    });
+  }
+
+  joinCurrencyCondition() {
+    return [
+      {
+        model: CurrencyModel,
+        where: { currencyId: Sequelize.col("dailypays.currencyId") }
+      }
+    ];
   }
 }
 
@@ -36,6 +70,10 @@ DailyPayModel.init(
     },
     amount: {
       type: Sequelize.DECIMAL(10, 2),
+      allowNull: false
+    },
+    dateOnly: {
+      type: Sequelize.STRING(30),
       allowNull: false
     },
     createdAt: {

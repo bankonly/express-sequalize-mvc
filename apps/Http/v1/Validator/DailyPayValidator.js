@@ -8,7 +8,7 @@ class DailyPayValidator {
       detail: Joi.string()
         .required()
         .default("..."),
-      amount: Joi.string().max(10)
+      amount: Joi.string().max(10),
     });
     return Joi.validate(data, schema);
   }
