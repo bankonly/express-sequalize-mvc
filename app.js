@@ -19,8 +19,8 @@ require("./configs/startup")(app);
 // load api routes
 require("./routes/api")(app);
 require("./routes/admin")(app);
+require("./routes/view")(app);
 
-app.get("/", (req, res, next) => res.render(__dirname + "/index.html"));
 
 io.on("connection", client => {
   global.socket = client;
