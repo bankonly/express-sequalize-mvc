@@ -16,9 +16,6 @@ require("./configs/db");
 // load startup config
 require("./configs/startup")(app);
 
-// load global varibale
-require("./configs/globalvaraiable")(app);
-
 // load api routes
 require("./routes/api")(app);
 require("./routes/admin")(app);
